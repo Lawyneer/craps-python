@@ -19,33 +19,24 @@ Notes:
         to the screen all at once.
 '''
 
+ # Import needed modules
+import random           # needed for the RNG
+import roll_die as roll # import the function to roll dice
+import time             # needed to pause after rolling die for effect
+from game_constants import SHOOTER_WINS, SHOOTER_LOSES
+
+
 # Define function
 def keep_rolling(point):
-    
-    # Import needed modules
-    import random           # needed for the RNG
-    import roll_die as roll # import the function to roll dice
-    import time             # needed to pause after rollind die for effect
-
-    # Shooter rolls die
-    new_roll = roll.roll_die(2) # craps used two dice
-
-    # Determine if shooter won or lost
-    if (new_roll == point): # shooter wins
-        win = 1             # set win
-        print("Shooter rolled a", new_roll,"to win\n") # prints win to screen
-        # Comment out print statement for large simulations
-
-    elif (new_roll == 7): # shooter lost
-        win = -1            # set win
-        print("Shooter crapped out with a", new_roll,"\n")
-    else: # neither point or crapping out
-        print("Shooter rolled:", new_roll,"\n")
-        delay = random.randint(1,5) # randomly select a delay from 1 to 5 seconds
-        time.sleep(delay)           # pause game as shooter keeps rolling
-        win = keep_rolling(point)   # recursively call function as needed
-    # end if, elif, else
-    
-    return win  # return amount won/lost
-
-# end function
+      
+    while True:
+        roll = roll.roll_die(2)
+        # shooter won
+        if roll == point:
+            return SHOOTER_WINS
+        # shooter lost
+        if roll == 7:
+            return SHOOTER_LOSES
+        
+        print("Shooter rolled:", roll, "\n")
+        time.sleep(random.randint(1,5))

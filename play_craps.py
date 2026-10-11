@@ -1,5 +1,5 @@
 '''
-play_craps.py - script to allow a user to play a simple texted based game of craps.
+play_craps.py - script to allow a user to play a simple text based game of craps.
 
 Inputs:
     bet - user input bet amount
@@ -16,7 +16,9 @@ Notes:
 
 # Import needed packages
 import craps as crps    # function to play craps
+import get_valid_input as gvi
 from os import system, name 
+from game_constants import PASS_LINE, DONT_PASS
 
 # Initialize variables
 bank_roll = 500     # starting bankroll
@@ -30,19 +32,13 @@ while(keep_playing == 1 and bank_roll > 0):
         _ = system('cls')
     else: # linux and Mac machines
         _ = system('clear')
-    # end if, else
         
     # Prompt user for a bet
-    bet = int(input("Please enter a bet.\n"))
-    
-    # Make sure bankroll covers bet
-    if(bet > bank_roll):
-        print("Bet too high.  Max bet is: ",bank_roll,"\n")
-        bet = int(input("Please reenter bet.\n"))
-    # end if
-    
-    # Prompt user to line
-    line = int(input("Enter 1 for a pass line bet and 2 for a don't pass line bet.\n"))
+    bet = gvi.get_valid_input("Please enter a bet.\n", range(1, bank_roll +1))
+
+    # Prompt user to line    
+    line = gvi.get_valid_input("Enter 1 for a pass line bet and 2 for a Don't Pass Line bet.\n", (PASS_LINE, DONT_PASS))
+
         
     # Play the game
     win = crps.craps(bet, line)
@@ -54,7 +50,6 @@ while(keep_playing == 1 and bank_roll > 0):
         print("The shooter won $", win, "\n")
     else: # print push
         print("The shooter pushes")
-    # end if, elif, else
     
     # Update bankroll
     bank_roll = bank_roll + win
@@ -64,11 +59,4 @@ while(keep_playing == 1 and bank_roll > 0):
     if(bank_roll <= 0): # Check if player busted
         print("You're bust.  Please try again.\n")
     else: # prompt user to keep playing
-        keep_playing = int(input("Enter 1 to keep playing or 0 to quit.\n"))
-        if(keep_playing < 0 or keep_playing > 1):
-            print("\nInput error.\n")
-            keep_playing = int(input("Enter 1 to keep playing or 0 to quit.\n"))
-        # end if
-    # end if, else
-
-# end while loop
+        keep_playing = gvi.get_valid_input("Enter 1 to keep playing or 0 to quit.\n", (0, 1))
